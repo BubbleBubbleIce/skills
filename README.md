@@ -1,30 +1,7 @@
 # Skills
 
-个人 Agent Skills 合集：为 Cursor、Claude Code、Codex 等 AI 编程助手提供可复用的工作流与领域知识。
+随着模型能力不断提升，一些复杂的 tdd 流程 skill 逐步被淘汰，这个仓库存放的是本人开发中真正会使用到的 skill。
 
-每个 skill 是一份结构化说明（通常是 `SKILL.md`），告诉 Agent **何时启用**、**怎么做**、以及需要遵守的约束。把重复性流程写成 skill 后，Agent 就能稳定按同一套规范执行。
-
-## 目录结构
-
-```text
-skills/
-├── README.md
-└── <skill-name>/
-    ├── SKILL.md          # 必需：触发条件与核心指令
-    ├── reference.md      # 可选：补充文档
-    ├── examples.md       # 可选：示例
-    └── scripts/          # 可选：辅助脚本
-```
-
-## Skill 约定
-
-每个 skill 目录下的 `SKILL.md` 使用 YAML frontmatter + Markdown 正文：
-
-```markdown
----
-name: skill-name
-description: 一句话说明做什么、何时使用
----
 
 # Skill Name
 
@@ -39,18 +16,25 @@ description: 一句话说明做什么、何时使用
 
 ## 安装与使用
 
+本仓库是 skill 的源。Codex 等 agent 从 `~/.agents/skills` 读取，**不要整目录替换或整目录软链**（仓库里有 `.git` / README，且 `~/.agents/skills` 里还有本仓库没有的第三方 skill）。
+
+做法：把每个 skill **单独软链**到 `~/.agents/skills/<name>`。改仓库即改 agent 侧，无需再复制。
+
+```bash
+# 首次，以及以后每加一个新 skill 后跑一次
+./scripts/link-skills.sh
+```
+
+- 缺的会建链接；内容相同的拷贝会换成链接。
+- 若某 skill 在仓库和 `~/.agents/skills` 已经分叉：默认跳过。`--force` 以仓库为准（先备份），`--adopt-agents` 先把 agent 侧拷回仓库再链接。
+- 备份目录：`~/.agents/skills-backup/`（不放在 `skills/` 里，避免被扫描成 skill）。
+
+Claude Code 这边若已把 `~/.claude/skills/<name>` 链到 `~/.agents/skills/<name>`，跟着 `~/.agents/skills` 一起更新即可。
+
 ### Cursor
 
-- **个人全局**：复制到 `~/.cursor/skills/<skill-name>/`
-- **项目内共享**：复制到仓库的 `.cursor/skills/<skill-name>/`
-
-### Claude Code
-
-复制到 `~/.claude/skills/<skill-name>/`，或按 Claude Code 文档中的 skills 路径配置。
-
-### Codex
-
-复制到 `~/.codex/skills/<skill-name>/`，或按 Codex 文档中的 skills 路径配置。
+- **个人全局**：`~/.cursor/skills/<skill-name>/`（需要的话也可对该目录跑同样的软链）
+- **项目内共享**：仓库的 `.cursor/skills/<skill-name>/`
 
 安装后，在对话里描述对应任务即可；Agent 会根据 skill 的 `description` 决定是否启用。
 
