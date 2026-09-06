@@ -2,10 +2,10 @@
 
 随着模型能力不断提升，一些复杂的 tdd 流程 skill 逐步被淘汰，这个仓库存放的是本人开发中真正会使用到的 skill。
 
-
 # Skill Name
 
 （具体步骤、约束、输出格式……）
+
 ```
 
 编写时注意：
@@ -47,11 +47,9 @@ Claude Code 这边若已把 `~/.claude/skills/<name>` 链到 `~/.agents/skills/<
 
 ## 已有 Skills
 
-仓库刚初始化，skills 会陆续迁入。当前列表：
-
 | Skill | 说明 |
 |-------|------|
-| — | 暂无 |
+| show-me | 用简洁图示、代码结构草图与聚焦的 HTML 工件帮用户直观理解当前话题（来源：humanlayer/skills） |
 
 ## License
 
